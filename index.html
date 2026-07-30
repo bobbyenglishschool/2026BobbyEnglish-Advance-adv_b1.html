@@ -421,7 +421,7 @@
                     <h2 class="sub-title" id="subTitleDisplay">Bobby English School - Smart Course Enrollment Form</h2>
                     <div class="contact-info">
                         <p><strong>電話 / Phone：</strong>03-2161338</p>
-                         <p><strong>官方 / Line：</strong>@bobbyenglish</p>
+                        <p><strong>官方 / Line：</strong>@bobbyenglish</p>
                         <p><strong>信箱 / E-mail：</strong>Joy@bobbyenglishschool.com</p>
                         <p><strong>地址 / Address：</strong>330 桃園市桃園區莊二街156號1樓</p>
                         <p><strong>立案字號 / Registration No.：</strong>府教社字第0930131461號</p>
@@ -468,11 +468,11 @@
                         <th><span class="zh-title">與學生關係</span><span class="en-title">Relationship</span></th>
                         <td><input type="text" name="relation" class="text-input" placeholder="" required></td>
                         <th><span class="zh-title">聯絡電話</span><span class="en-title">Phone Number</span></th>
-                        <td><input type="tel" name="phone" class="text-input" placeholder="主要聯絡手機" required></td>
+                        <td><input type="tel" name="phone" class="text-input" placeholder="0912345678" required></td>
                     </tr>
                     <tr>
                         <th><span class="zh-title">電子信箱</span><span class="en-title">E-mail</span></th>
-                        <td colspan="3"><input type="email" name="email" class="text-input" placeholder=""></td>
+                        <td colspan="3"><input type="email" name="email" class="text-input" placeholder="example@email.com"></td>
                         <th><span class="zh-title">LINE ID</span><span class="en-title">LINE ID</span></th>
                         <td><input type="text" name="line_id" class="text-input" placeholder="LINE ID"></td>
                     </tr>
@@ -577,7 +577,7 @@
                 </div>
                 <div class="term-item">
                     <strong>3. 安全與公共責任 / Safety & Public Liability Insurance：</strong><br>
-                    為維護學生安全，下課後請家長按時前來接送。本補習班公共安全設施、消防設備以及公共意外責任險均严格符合政府法令規範。<br>
+                    為維護學生安全，下課後請家長按時前來接送。本補習班公共安全設施、消防設備以及公共意外責任險均嚴格符合政府法令規範。<br>
                     <span style="color: #555; font-style: italic;">To ensure student safety, parents are requested to pick up their children on time after class. Our school's public safety facilities, fire safety equipment, and public liability insurance strictly comply with government laws and regulations.</span>
                 </div>
                 <div class="term-item">
@@ -600,7 +600,8 @@
                     </div>
                     <div class="signature-row">
                         <span>日期 Date</span>
-                        <input type="date" name="parent_sig_date" class="signature-input" required>
+                        <!-- 🎯 補強：加入 ID 便於 JavaScript 自動感應帶入日期 -->
+                        <input type="date" name="parent_sig_date" id="parentSigDate" class="signature-input" required>
                     </div>
                 </div>
 
@@ -611,7 +612,8 @@
                     </div>
                     <div class="signature-row">
                         <span>日期 Date</span>
-                        <input type="date" name="teacher_sig_date" class="signature-input">
+                        <!-- 🎯 補強：加入 ID 便於 JavaScript 自動感應帶入日期 -->
+                        <input type="date" name="teacher_sig_date" id="teacherSigDate" class="signature-input">
                     </div>
                 </div>
             </div>
@@ -643,6 +645,11 @@ window.onload = function() {
     document.getElementById('subTitleDisplay').innerHTML = "Bobby English School - " + TARGET_COURSE + " Enrollment Form";
     document.getElementById('dynamicBannerDisplay').innerHTML = TARGET_COURSE + " 專屬智慧報名系統";
     
+    // 🎯 自動時光晶片：開啟頁面自動帶入當天日期
+    var today = new Date().toISOString().split('T')[0];
+    if (document.getElementById('parentSigDate')) document.getElementById('parentSigDate').value = today;
+    if (document.getElementById('teacherSigDate')) document.getElementById('teacherSigDate').value = today;
+
     calculateTuition();
 };
 
@@ -690,6 +697,51 @@ function calculateTuition() {
                                 "👉 <b>方案核定應繳總金額：NT$ " + finalTotal + " 元</b>";
     }
 }
+
+// 🎯 核心補強：補齊遺失的表單送出事件監聽器與 GAS 自動連線晶片！
+document.getElementById('enrollmentForm').addEventListener('submit', function(e) {
+    e.preventDefault(); 
+    var form = this;
+    var submitBtn = document.getElementById('submitBtn');
+    
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerText = "正在同步巴比核心雲端校務資料庫...";
+    }
+    
+    var params = new URLSearchParams();
+    var baseUrl = window.location.origin + window.location.pathname;
+    var formElements = form.elements;
+    
+    for (var i = 0; i < formElements.length; i++) {
+        var el = formElements[i];
+        if (!el.name || el.type === 'file' || el.type === 'submit' || el.name.startsWith('_')) continue;
+        if (el.type === 'radio') {
+            if (el.checked) params.append(el.name, el.value);
+        } else {
+            if (el.value) params.append(el.name, el.value);
+        }
+    }
+    params.append('auto_print', 'true');
+    document.getElementById('printLinkInput').value = baseUrl + '?' + params.toString();
+    
+    var googleAppsScriptUrl = "https://script.google.com/macros/s/AKfycbxt07hF-qkXePULEBjuCpzdWnaeNWsTlQV7dRhch_iBwtVePOIJzldTAsR0LothoQ1l/exec";
+    
+    // 🎯 核心防護：加入 mode: 'no-cors' 避開瀏覽器跨域安全性連線阻斷
+    fetch(googleAppsScriptUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: new URLSearchParams(new FormData(form))
+    })
+    .then(function() {
+        alert("🎉 巴比美語：單一課程專屬雲端連線登記成功！");
+        form.submit(); 
+    })
+    .catch(function(error) {
+        console.warn("GAS Sync notice:", error);
+        form.submit();
+    });
+});
 </script>
 </body>
 </html>
