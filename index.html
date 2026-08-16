@@ -229,6 +229,9 @@
             font-weight: bold;
             color: var(--uci-blue);
             font-size: 13.5px;
+            width: 100%;
+            height: 100%;
+            padding: 0;
         }
 
         /* 出生年月日及小日曆圖檔靠右預留安全距離 */
@@ -560,6 +563,7 @@
                             <th><span class="zh-title">與學生關係</span><span class="en-title">Relationship</span></th>
                             <td><input type="text" name="relation" class="text-input" placeholder="" required></td>
                             <th><span class="zh-title">聯絡電話</span><span class="en-title">Phone Number</span></th>
+                            <!-- 🎯 清空佔位文字，維持潔淨 UI -->
                             <td><input type="tel" name="phone" class="text-input" placeholder="" required></td>
                         </tr>
                         <tr>
@@ -582,10 +586,12 @@
                     <tbody>
                         <tr>
                             <th><span class="zh-title">就讀班別</span><span class="en-title">Course</span></th>
+                            <!-- 🎯 就讀班別：幾何上下左右完全置中結構 -->
                             <td colspan="2">
                                 <div id="courseLabelDisplay" class="static-course-display">未設定課程</div>
                             </td>
                             <th><span class="zh-title">標準上課時段</span><span class="en-title">Schedule</span></th>
+                            <!-- 🎯 上課時間：幾何上下左右完全置中結構 -->
                             <td colspan="2" id="timeDisplay" style="font-weight: bold; color: var(--uci-blue); padding: 0; height: 100%;">載入中...</td>
                         </tr>
                         <tr>
@@ -743,17 +749,20 @@
 </div>
 
 <script>
-// ===== 🎯 官方死數字防線數據庫（Aegis 雙層分行精準校準版） =====
+// ===== 🎯 官方死數字防線數據庫（已修剪 (新進學生) 與 (晉升學生) 贅字） =====
 var advancedDeadValues = {
     "新進": { 
-        label: "<div style='display:flex; flex-direction:column; align-items:flex-start; justify-content:center;'><div style='font-weight:800; color:var(--uci-blue); font-size:14px; line-height:1.2;'>Advance B1</div><div style='font-weight:700; color:var(--uci-blue); font-size:12.5px; line-height:1.2; margin-top:3px;'>青少年進階美語 (新進學生)</div></div>", 
+        // 🎯 核心修改：第一行 Advance B1 置中，第二行 青少年進階美語 置中，徹底移除 (新進學生) 贅字
+        labelHtml: "<div style='display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; height:100%; width:100%;'><div style='font-weight:800; color:var(--uci-blue); font-size:14px; line-height:1.2;'>Advance B1</div><div style='font-weight:700; color:var(--uci-blue); font-size:12px; line-height:1.2; margin-top:2px;'>青少年進階美語</div></div>",
+        labelRaw: "Advance B1 青少年進階美語 (新進學生)",
         "1.0": 36680, "0.9": 33400, "0.85": 31664, "0.8": 29344, 
         time: "<div style='display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; height:100%; width:100%;'><div style='font-weight:800; color:var(--uci-blue); font-size:13px; line-height:1.2;'><span class='no-orphan'>每週二、四</span></div><div style='font-weight:700; color:var(--uci-blue); font-size:11.5px; line-height:1.2; margin-top:3px;'><span class='no-orphan'>7:00 PM - 9:00 PM</span></div></div>", 
         t: 31160, m: 3240, ms: 2280 
     },
-    // 🎯 最高指揮官指令精準執行：刪除 (晉升學生)，第一行 Advance B1，第二行 青少年進階美語
     "晉升": { 
-        label: "<div style='display:flex; flex-direction:column; align-items:flex-start; justify-content:center;'><div style='font-weight:800; color:var(--uci-blue); font-size:14px; line-height:1.2;'>Advance B1</div><div style='font-weight:700; color:var(--uci-blue); font-size:12.5px; line-height:1.2; margin-top:3px;'>青少年進階美語</div></div>", 
+        // 🎯 核心修改：第一行 Advance B1 置中，第二行 青少年進階美語 置中，徹底移除 (晉升學生) 贅字
+        labelHtml: "<div style='display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; height:100%; width:100%;'><div style='font-weight:800; color:var(--uci-blue); font-size:14px; line-height:1.2;'>Advance B1</div><div style='font-weight:700; color:var(--uci-blue); font-size:12px; line-height:1.2; margin-top:2px;'>青少年進階美語</div></div>",
+        labelRaw: "Advance B1 青少年進階美語 (晉升學生)",
         "1.0": 33940, "0.9": 30546, "0.85": 28849, "0.8": 27152, 
         time: "<div style='display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; height:100%; width:100%;'><div style='font-weight:800; color:var(--uci-blue); font-size:13px; line-height:1.2;'><span class='no-orphan'>每週二、四</span></div><div style='font-weight:700; color:var(--uci-blue); font-size:11.5px; line-height:1.2; margin-top:3px;'><span class='no-orphan'>7:00 PM - 9:00 PM</span></div></div>", 
         t: 31160, m: 500, ms: 2280 
@@ -815,7 +824,9 @@ function calculateTuition() {
 
         if (advancedDeadValues[statusKey]) {
             var adv = advancedDeadValues[statusKey];
-            labelDisplay.innerHTML = adv.label;
+            
+            // 🎯 就讀班別渲染：帶入雙層幾何置中 HTML 結構
+            labelDisplay.innerHTML = adv.labelHtml;
             
             var finalTotal = adv[discountRate.toString()] || adv["1.0"];
             
