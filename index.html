@@ -205,11 +205,11 @@
                             <th><span class="zh-title">出生日期</span><span class="en-title">Date of Birth</span></th>
                             <td><input type="text" id="dob" name="dob" class="text-input" placeholder="例：2018/05/20" required></td>
                             <th><span class="zh-title">就讀學校</span><span class="en-title">School</span></th>
-                            <td><input type="text" id="school_name" name="school_name" class="text-input" placeholder="請填就讀國小/幼兒園"></td>
+                            <td><input type="text" id="school_name" name="school_name" class="text-input" placeholder="請填就讀國小/國中"></td>
                             <th><span class="zh-title">年級</span><span class="en-title">Grade</span></th>
                             <td>
                                 <div style="display: flex; align-items: center; justify-content: flex-start; padding: 0 4px; height: 100%; white-space: nowrap;">
-                                    <input type="text" id="grade_level" name="grade_level" style="border: none; border-bottom: 1.5px solid #1b3d6d; width: 45px; text-align: center; margin: 0 2px; background: transparent; outline: none; font-weight: bold;" placeholder="如：5"> 年級
+                                    <input type="text" id="grade_level" name="grade_level" style="border: none; border-bottom: 1.5px solid #1b3d6d; width: 45px; text-align: center; margin: 0 2px; background: transparent; outline: none; font-weight: bold;" placeholder="如：6"> 年級
                                 </div>
                             </td>
                         </tr>
@@ -247,14 +247,15 @@
                             <th><span class="zh-title">標準上課時段</span><span class="en-title">Schedule</span></th>
                             <td colspan="2" id="timeDisplay" style="padding: 0; text-align: center; vertical-align: middle;">載入中...</td>
                         </tr>
-                        <!-- 🎯 Advance 系列專屬：保留「學員身分標籤」動態計費切換 -->
+                        <!-- 🎯 Advance B1 專屬：精準四大教材加購方案選擇器 -->
                         <tr>
-                            <th><span class="zh-title">學員身分標籤</span><span class="en-title">Student Identity</span></th>
+                            <th><span class="zh-title">學員身分與教材</span><span class="en-title">Student Identity & Books</span></th>
                             <td colspan="5">
-                                <div class="radio-group">
-                                    <label><input type="radio" name="student_identity" value="new" checked onchange="calculateTuition()"> 新生（需購買專屬教材）</label>
-                                    <label><input type="radio" name="student_identity" value="old_with_mat" onchange="calculateTuition()"> 舊生（需購買當期新教材）</label>
-                                    <label><input type="radio" name="student_identity" value="old_no_mat" onchange="calculateTuition()"> 舊生（延用舊教材／免購教材）</label>
+                                <div class="radio-group" style="flex-direction: column; align-items: flex-start; gap: 6px; padding: 6px 4px;">
+                                    <label><input type="radio" name="student_identity" value="new" checked onchange="calculateTuition()"> 1. 新進 B1 學生（需購買全套教材 (1)+(2)+(3)：NT$ 3,240）</label>
+                                    <label><input type="radio" name="student_identity" value="old_azar_workbook" onchange="calculateTuition()"> 2. A2 直升 B1 舊生（加購 (2)Azar語法 + (3)專屬作業本：NT$ 1,830）</label>
+                                    <label><input type="radio" name="student_identity" value="old_od_workbook" onchange="calculateTuition()"> 3. 已具備語法書舊生（加購 (1)OD3讀本 + (3)專屬作業本：NT$ 1,910）</label>
+                                    <label><input type="radio" name="student_identity" value="old_no_mat" onchange="calculateTuition()"> 4. 沿用已有教材舊生（無需購買任何教材：NT$ 0）</label>
                                 </div>
                             </td>
                         </tr>
@@ -389,12 +390,15 @@
 </div>
 
 <script>
+// 🎯 Advance B1 專屬資料庫配置（更正上課時間與價格）
 var courseDatabase = {
     "Advance B1": { 
         id: "Advance B1",
         zhName: "進階寫作與思維訓練", 
-        time: "<div style='display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding: 4px 0;'><div style='font-weight:800; color:var(--uci-blue); font-size:13px; line-height:1.2;'><span class='no-orphan'>每週二、四</span></div><div style='font-weight:700; color:var(--uci-blue); font-size:11.5px; line-height:1.2; margin-top:3px;'><span class='no-orphan'>4:30 PM - 6:30 PM (2小時/堂)</span></div></div>", 
-        lessons: 38, price: 770, materials: 3520, misc: 60 
+        time: "<div style='display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding: 4px 0;'><div style='font-weight:800; color:var(--uci-blue); font-size:13px; line-height:1.2;'><span class='no-orphan'>每週二、四</span></div><div style='font-weight:700; color:var(--uci-blue); font-size:11.5px; line-height:1.2; margin-top:3px;'><span class='no-orphan'>7:00 PM - 9:00 PM (2小時/堂)</span></div></div>", 
+        lessons: 38, 
+        price: 820,       // 單堂 $820
+        misc: 60          // 單堂學雜費 $60
     }
 };
 
@@ -573,7 +577,7 @@ function isCanvasBlank(canvas) {
     return !pixelBuffer.some(function(color) { return color !== 0; });
 }
 
-// 🎯 Advance B1 專屬計費邏輯：結合「學員身分標籤」與「折扣率」
+// 🎯 Advance B1 專屬動態計費邏輯（四大教材加購金額 + 額外折扣）
 function calculateTuition() {
     try {
         var courseKey = TARGET_COURSE;
@@ -585,7 +589,7 @@ function calculateTuition() {
         if (courseDatabase[courseKey]) {
             var course = courseDatabase[courseKey];
             labelDisplay.innerHTML = "<div class='course-id'>" + course.id + "</div><div class='course-zh'>" + course.zhName + "</div>";
-            document.getElementById('class_time').value = "每週二四 4:30-6:30 PM";
+            document.getElementById('class_time').value = "每週二四 7:00-9:00 PM";
             
             // 1. 取得折扣率
             var discountRate = 1.0;
@@ -595,15 +599,31 @@ function calculateTuition() {
                 document.getElementById('discount_plan_text').value = activeDiscountRadio.parentElement.innerText.trim();
             }
 
-            // 2. 取得學員身分並決定教材費
+            // 2. 取得學員身分並對應精準教材費用
             var identity = "new";
             var activeIdentityRadio = document.querySelector('input[name="student_identity"]:checked');
             if (activeIdentityRadio) {
                 identity = activeIdentityRadio.value;
             }
 
-            var tuitionTotal = course.price * course.lessons; // 770 * 38 = 29,260
-            var materialsTotal = (identity === 'old_no_mat') ? 0 : course.materials; // 新生/舊生含教材=$3,520，舊生免教材=$0
+            var materialsTotal = 3240; // 預設全套
+            var idText = "新生(全套教材)";
+
+            if (identity === 'new') {
+                materialsTotal = 3240;
+                idText = "新進 B1 學生 (全套教材 $3,240)";
+            } else if (identity === 'old_azar_workbook') {
+                materialsTotal = 1830;
+                idText = "A2 直升 B1 舊生 (加購 Azar語法+作業本 $1,830)";
+            } else if (identity === 'old_od_workbook') {
+                materialsTotal = 1910;
+                idText = "已具語法書舊生 (加購 OD3讀本+作業本 $1,910)";
+            } else if (identity === 'old_no_mat') {
+                materialsTotal = 0;
+                idText = "沿用舊教材 (免購教材 $0)";
+            }
+
+            var tuitionTotal = course.price * course.lessons; // 820 * 38 = 31,160
             var miscTotal = course.misc * course.lessons;     // 60 * 38 = 2,280
             
             var subTotal = tuitionTotal + materialsTotal + miscTotal;
@@ -619,7 +639,6 @@ function calculateTuition() {
             var discountStr = (discountRate * 10).toString();
             if (discountRate === 1.0) discountStr = "10";
             var discountText = discountRate === 1.0 ? "未套用額外優惠（維持原價）" : "套用 " + discountStr + " 折";
-            var idText = (identity === 'new') ? "新生" : (identity === 'old_with_mat' ? "舊生(含教材)" : "舊生(免購教材)");
 
             calcPreview.innerHTML = "📚 <b>" + courseKey + " 費用明細與折扣說明（" + idText + "）</b>：<br>" +
                                     "基本學費：$" + course.price + " × " + course.lessons + "堂 = $" + tuitionTotal.toLocaleString() + " | " +
@@ -690,9 +709,5 @@ document.getElementById('enrollmentForm').addEventListener('submit', function(e)
     });
 });
 </script>
-<!-- 🛡️ 巴比美語智慧財產權聲明 (線上顯示，列印自動隱藏) -->
-<footer class="no-print" style="text-align: center; padding: 15px 0; margin-top: 20px; font-size: 13px; color: #666; border-top: 1px solid #e0e0e0;">
-  <p style="margin: 0;">© 2026 私立巴比美語補習班 (Bobby English School). All Rights Reserved. 版權所有，轉載必究。</p>
-</footer>
 </body>
 </html>
