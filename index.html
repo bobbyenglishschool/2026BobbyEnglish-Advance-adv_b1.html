@@ -21,7 +21,7 @@
         }
         
         * { box-shadow: none; box-sizing: border-box; font-family: 'Inter', 'Noto Sans TC', sans-serif; -webkit-font-smoothing: antialiased; }
-        body { background-color: #f1f5f9; margin: 0; padding: 20px 0; color: var(--text-main); line-height: 1.6; }
+        body { background-color: #f1f5f9; margin: 0; padding: 20px 0; color: var(--text-main); line-height: 1.6; overflow-x: hidden; }
 
         ::placeholder {
             color: #94a3b8 !important;
@@ -47,9 +47,11 @@
         .photo-file-input { position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; cursor: pointer; }
         .preview-img { width: 100%; height: 100%; object-fit: cover; }
         .section-title { background-color: var(--uci-blue); color: #fff; padding: 8px 14px; font-size: 15px; font-weight: 800; margin: 20px 0 10px 0; display: inline-block; border-radius: 6px 6px 0 0; letter-spacing: 0.4px; word-break: keep-all; }
-        .table-responsive-wrapper { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 15px; }
-        table { width: 100%; border-collapse: collapse !important; font-size: 13px; table-layout: fixed; border: 1px solid #1b3d6d !important; background-color: #ffffff; }
-        th, td { border: 1px solid #1b3d6d !important; padding: 6px 8px; vertical-align: middle; word-break: break-word; }
+        
+        /* 🎯 修正 Mac 電腦左右滑動：鎖定容器與表格最大寬度 */
+        .table-responsive-wrapper { width: 100%; max-width: 100%; overflow-x: hidden; margin-bottom: 15px; }
+        table { width: 100%; max-width: 100%; border-collapse: collapse !important; font-size: 13px; table-layout: fixed; border: 1px solid #1b3d6d !important; background-color: #ffffff; }
+        th, td { border: 1px solid #1b3d6d !important; padding: 6px 8px; vertical-align: middle; word-break: break-word; overflow-wrap: break-word; }
         th { background-color: #f0f4f8; color: var(--uci-blue); text-align: center; width: 18%; line-height: 1.4; font-weight: 700; padding: 6px 4px; }
         th span.zh-title { font-size: 13.5px; display: block; margin-bottom: 2px; font-weight: 800; letter-spacing: 0.3px; word-break: keep-all; }
         th span.en-title { font-size: 10.5px; display: block; font-weight: 500; opacity: 0.85; font-family: 'Inter', sans-serif; word-break: keep-all; }
@@ -58,11 +60,17 @@
         .static-course-display { font-weight: bold; color: var(--uci-blue); font-size: 13.5px; display: flex; flex-direction: column; align-items: center !important; justify-content: center !important; text-align: center !important; line-height: 1.3; padding: 4px 0; }
         .static-course-display .course-id { font-size: 14.5px; font-weight: 800; word-break: keep-all; }
         .static-course-display .course-zh { font-size: 12.5px; font-weight: 700; margin-top: 3px; word-break: keep-all; }
-        .radio-group { display: flex; align-items: center; justify-content: flex-start; gap: 12px; padding-left: 4px; height: 100%; flex-wrap: wrap; }
-        .radio-group label { display: flex; align-items: center; gap: 4px; cursor: pointer; white-space: nowrap; }
+        
+        /* 🎯 修正選單項目：允許自動換行，防止字串超出框外 */
+        .radio-group { display: flex; align-items: center; justify-content: flex-start; gap: 12px; padding-left: 4px; height: 100%; flex-wrap: wrap; width: 100%; }
+        .radio-group label { display: flex; align-items: flex-start; gap: 6px; cursor: pointer; white-space: normal !important; word-break: break-word !important; overflow-wrap: break-word !important; max-width: 100%; line-height: 1.4; }
+        .radio-group input[type="radio"] { flex-shrink: 0; margin-top: 3px; }
+
         .payment-inline-row { display: flex; align-items: center; justify-content: flex-start; gap: 8px; padding-left: 4px; padding-right: 12px; height: 100%; width: 100%; flex-wrap: wrap; }
-        .payment-inline-row label { display: flex; align-items: center; gap: 4px; cursor: pointer; white-space: nowrap; }
-        .offer-box { background-color: rgba(254, 204, 7, 0.18); border: 1.5px dashed var(--uci-gold); padding: 12px 16px; margin: 15px 0; border-radius: 6px; font-weight: 800; color: #856400; text-align: center; font-size: 14px; line-height: 1.6; word-break: keep-all; }
+        .payment-inline-row label { display: flex; align-items: center; gap: 4px; cursor: pointer; white-space: normal; }
+        
+        /* 🎯 修正試算盒：防範手機端試算結果跑出框外 */
+        .offer-box { background-color: rgba(254, 204, 7, 0.18); border: 1.5px dashed var(--uci-gold); padding: 12px 16px; margin: 15px 0; border-radius: 6px; font-weight: 800; color: #856400; text-align: center; font-size: 14px; line-height: 1.6; word-break: break-word !important; overflow-wrap: break-word !important; width: 100%; box-sizing: border-box; }
         .terms-header { text-align: center; color: var(--uci-blue); border-bottom: 2.5px solid var(--uci-blue); padding-bottom: 12px; margin-bottom: 22px; font-size: 19px; font-weight: 800; }
         .privacy-statement { background-color: #f0f4f8; padding: 14px 18px; border-left: 4.5px solid var(--uci-blue); font-size: 13.5px; margin-bottom: 22px; border-radius: 6px; border: 1px solid #1b3d6d !important; text-align: justify; line-height: 1.65; font-weight: 500; }
         .terms-list { font-size: 13.5px; color: var(--text-main); text-align: justify; }
@@ -91,6 +99,7 @@
             tr { display: table-row !important; }
         }
 
+        /* 📱 手機端極致防護排版 */
         @media (max-width: 768px) {
             body { padding: 6px 0; }
             .page { padding: 16px 12px; }
@@ -98,10 +107,10 @@
             .header-section { flex-direction: column; align-items: center; text-align: center; }
             .title-area { padding-right: 0; margin-bottom: 14px; }
             
-            .table-responsive-wrapper { overflow-x: visible !important; }
+            .table-responsive-wrapper { overflow-x: hidden !important; width: 100% !important; }
             table { width: 100% !important; min-width: 0 !important; display: block !important; border: none !important; }
             tbody { display: block !important; width: 100% !important; }
-            tr { display: flex !important; flex-wrap: wrap !important; width: 100% !important; margin-bottom: 12px; border: 1.5px solid var(--uci-blue) !important; border-radius: 8px; overflow: hidden; background: #fff; }
+            tr { display: flex !important; flex-wrap: wrap !important; width: 100% !important; margin-bottom: 12px; border: 1.5px solid var(--uci-blue) !important; border-radius: 8px; overflow: hidden; background: #fff; box-sizing: border-box !important; }
             
             th { display: block !important; width: 100% !important; background-color: #e6f0fa !important; text-align: left !important; padding: 6px 10px !important; border-bottom: 1px solid var(--uci-blue) !important; border-right: none !important; }
             th span.zh-title { font-size: 13px !important; display: inline-block !important; margin-right: 6px; }
@@ -116,6 +125,8 @@
                 border: none !important; 
                 border-bottom: 1px dashed #cbd5e1 !important; 
                 box-sizing: border-box !important;
+                word-break: break-word !important;
+                overflow-wrap: break-word !important;
             }
             td:last-child { border-bottom: none !important; }
 
@@ -134,6 +145,7 @@
             
             .signature-section { flex-direction: column; gap: 15px; }
             .signature-box { width: 100%; }
+            .offer-box { font-size: 13px !important; padding: 10px 12px !important; }
         }
     </style>
 </head>
@@ -245,15 +257,15 @@
                             <th><span class="zh-title">標準上課時段</span><span class="en-title">Schedule</span></th>
                             <td colspan="2" id="timeDisplay" style="padding: 0; text-align: center; vertical-align: middle;">載入中...</td>
                         </tr>
-                        <!-- 🎯 最新精準雙語教材選單 -->
+                        <!-- 🎯 強化自動斷行防溢出之選單列 -->
                         <tr>
                             <th><span class="zh-title">學員身分與教材</span><span class="en-title">Student Identity & Books</span></th>
                             <td colspan="5">
-                                <div class="radio-group" style="flex-direction: column; align-items: flex-start; gap: 6px; padding: 6px 4px;">
-                                    <label><input type="radio" name="student_identity" value="new_full" checked onchange="calculateTuition()"> 1. New B1 學生 (Buy Azar Basic Grammar SB/WB + Oxford Discover SB/WB Book 3 + Notebooks = $3,240)</label>
-                                    <label><input type="radio" name="student_identity" value="old_azar" onchange="calculateTuition()"> 2. B1 學生 (Buy Azar Basic Grammar SB/WB + Notebooks = $1,830)</label>
-                                    <label><input type="radio" name="student_identity" value="old_od" onchange="calculateTuition()"> 3. B1 學生 (Buy Oxford Discover SB/WB Book 3 + Notebooks = $1,910)</label>
-                                    <label><input type="radio" name="student_identity" value="old_notebook" onchange="calculateTuition()"> 4. B1 學生 (Buy Notebooks = $500)</label>
+                                <div class="radio-group" style="flex-direction: column; align-items: flex-start; gap: 8px; padding: 6px 4px;">
+                                    <label><input type="radio" name="student_identity" value="new_full" checked onchange="calculateTuition()"> <span>1. New B1 學生 (Buy Azar Basic Grammar SB/WB + Oxford Discover SB/WB Book 3 + Notebooks = $3,240)</span></label>
+                                    <label><input type="radio" name="student_identity" value="old_azar" onchange="calculateTuition()"> <span>2. B1 學生 (Buy Azar Basic Grammar SB/WB + Notebooks = $1,830)</span></label>
+                                    <label><input type="radio" name="student_identity" value="old_od" onchange="calculateTuition()"> <span>3. B1 學生 (Buy Oxford Discover SB/WB Book 3 + Notebooks = $1,910)</span></label>
+                                    <label><input type="radio" name="student_identity" value="old_notebook" onchange="calculateTuition()"> <span>4. B1 學生 (Buy Notebooks = $500)</span></label>
                                 </div>
                             </td>
                         </tr>
@@ -574,7 +586,6 @@ function isCanvasBlank(canvas) {
     return !pixelBuffer.some(function(color) { return color !== 0; });
 }
 
-// 🎯 精準雙語動態計費邏輯 (匹配最新選單文字)
 function calculateTuition() {
     try {
         var courseKey = TARGET_COURSE;
