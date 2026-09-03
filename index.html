@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>私立巴比美語短期補習班 | 專屬學員報名系統 (Advance B1)</title>
+    <title>私立巴比美語短期補習班 | 學員報名系統 (Advance B1)</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,7 +23,6 @@
         * { box-shadow: none; box-sizing: border-box; font-family: 'Inter', 'Noto Sans TC', sans-serif; -webkit-font-smoothing: antialiased; }
         body { background-color: #f1f5f9; margin: 0; padding: 20px 0; color: var(--text-main); line-height: 1.6; }
 
-        /* 🎨 提示文淡化屬性 (防範家長誤以為已填寫) */
         ::placeholder {
             color: #94a3b8 !important;
             opacity: 0.75 !important;
@@ -92,7 +91,6 @@
             tr { display: table-row !important; }
         }
 
-        /* 📱 手機響應式排版 (解鎖高度與邊界防護) */
         @media (max-width: 768px) {
             body { padding: 6px 0; }
             .page { padding: 16px 12px; }
@@ -163,11 +161,11 @@
 
         <!-- PAGE 1 -->
         <div class="page page1">
-            <div id="dynamicBannerDisplay" class="dynamic-top-banner">Advance B1 專屬智慧報名系統</div>
+            <div id="dynamicBannerDisplay" class="dynamic-top-banner">Advance B1 智慧報名系統</div>
 
             <div class="header-section">
                 <div class="title-area">
-                    <h1 class="main-title" id="mainTitleDisplay">私立巴比美語短期補習班 ｜ Advance B1 專屬智慧報名系統</h1>
+                    <h1 class="main-title" id="mainTitleDisplay">私立巴比美語短期補習班 ｜ Advance B1 智慧報名系統</h1>
                     <h2 class="sub-title" id="subTitleDisplay">Bobby English School - Advance B1 Enrollment Form</h2>
                     <div class="contact-info">
                         <p><strong>電話 / Phone：</strong>03-2161338</p>
@@ -247,15 +245,15 @@
                             <th><span class="zh-title">標準上課時段</span><span class="en-title">Schedule</span></th>
                             <td colspan="2" id="timeDisplay" style="padding: 0; text-align: center; vertical-align: middle;">載入中...</td>
                         </tr>
-                        <!-- 🎯 Advance B1 專屬：精準四大教材加購方案選擇器 -->
+                        <!-- 🎯 最新精準雙語教材選單 -->
                         <tr>
                             <th><span class="zh-title">學員身分與教材</span><span class="en-title">Student Identity & Books</span></th>
                             <td colspan="5">
                                 <div class="radio-group" style="flex-direction: column; align-items: flex-start; gap: 6px; padding: 6px 4px;">
-                                    <label><input type="radio" name="student_identity" value="new" checked onchange="calculateTuition()"> 1. 新進 B1 學生（需購買全套教材 (1)+(2)+(3)：NT$ 3,240）</label>
-                                    <label><input type="radio" name="student_identity" value="old_azar_workbook" onchange="calculateTuition()"> 2. A2 直升 B1 舊生（加購 (2)Azar語法 + (3)專屬作業本：NT$ 1,830）</label>
-                                    <label><input type="radio" name="student_identity" value="old_od_workbook" onchange="calculateTuition()"> 3. 已具備語法書舊生（加購 (1)OD3讀本 + (3)專屬作業本：NT$ 1,910）</label>
-                                    <label><input type="radio" name="student_identity" value="old_no_mat" onchange="calculateTuition()"> 4. 沿用已有教材舊生（無需購買任何教材：NT$ 0）</label>
+                                    <label><input type="radio" name="student_identity" value="new_full" checked onchange="calculateTuition()"> 1. New B1 學生 (Buy Azar Basic Grammar SB/WB + Oxford Discover SB/WB Book 3 + Notebooks = $3,240)</label>
+                                    <label><input type="radio" name="student_identity" value="old_azar" onchange="calculateTuition()"> 2. B1 學生 (Buy Azar Basic Grammar SB/WB + Notebooks = $1,830)</label>
+                                    <label><input type="radio" name="student_identity" value="old_od" onchange="calculateTuition()"> 3. B1 學生 (Buy Oxford Discover SB/WB Book 3 + Notebooks = $1,910)</label>
+                                    <label><input type="radio" name="student_identity" value="old_notebook" onchange="calculateTuition()"> 4. B1 學生 (Buy Notebooks = $500)</label>
                                 </div>
                             </td>
                         </tr>
@@ -390,15 +388,14 @@
 </div>
 
 <script>
-// 🎯 Advance B1 專屬資料庫配置（更正上課時間與價格）
 var courseDatabase = {
     "Advance B1": { 
         id: "Advance B1",
         zhName: "進階寫作與思維訓練", 
         time: "<div style='display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding: 4px 0;'><div style='font-weight:800; color:var(--uci-blue); font-size:13px; line-height:1.2;'><span class='no-orphan'>每週二、四</span></div><div style='font-weight:700; color:var(--uci-blue); font-size:11.5px; line-height:1.2; margin-top:3px;'><span class='no-orphan'>7:00 PM - 9:00 PM (2小時/堂)</span></div></div>", 
         lessons: 38, 
-        price: 820,       // 單堂 $820
-        misc: 60          // 單堂學雜費 $60
+        price: 820,       
+        misc: 60          
     }
 };
 
@@ -519,9 +516,9 @@ function loadRowDataIfPresent() {
 
 window.onload = function() {
     document.getElementById('course_name_hidden').value = TARGET_COURSE;
-    document.getElementById('mainTitleDisplay').innerHTML = "私立巴比美語短期補習班 ｜ " + TARGET_COURSE + " 專屬智慧報名系統";
+    document.getElementById('mainTitleDisplay').innerHTML = "私立巴比美語短期補習班 ｜ " + TARGET_COURSE + " 智慧報名系統";
     document.getElementById('subTitleDisplay').innerHTML = "Bobby English School - " + TARGET_COURSE + " Enrollment Form";
-    document.getElementById('dynamicBannerDisplay').innerHTML = TARGET_COURSE + " 專屬智慧報名系統";
+    document.getElementById('dynamicBannerDisplay').innerHTML = TARGET_COURSE + " 智慧報名系統";
 
     var today = new Date().toISOString().split('T')[0];
     if (document.getElementById('parentSigDate')) document.getElementById('parentSigDate').value = today;
@@ -577,7 +574,7 @@ function isCanvasBlank(canvas) {
     return !pixelBuffer.some(function(color) { return color !== 0; });
 }
 
-// 🎯 Advance B1 專屬動態計費邏輯（四大教材加購金額 + 額外折扣）
+// 🎯 精準雙語動態計費邏輯 (匹配最新選單文字)
 function calculateTuition() {
     try {
         var courseKey = TARGET_COURSE;
@@ -591,7 +588,6 @@ function calculateTuition() {
             labelDisplay.innerHTML = "<div class='course-id'>" + course.id + "</div><div class='course-zh'>" + course.zhName + "</div>";
             document.getElementById('class_time').value = "每週二四 7:00-9:00 PM";
             
-            // 1. 取得折扣率
             var discountRate = 1.0;
             var activeDiscountRadio = document.querySelector('input[name="discount_plan"]:checked');
             if (activeDiscountRadio) {
@@ -599,28 +595,27 @@ function calculateTuition() {
                 document.getElementById('discount_plan_text').value = activeDiscountRadio.parentElement.innerText.trim();
             }
 
-            // 2. 取得學員身分並對應精準教材費用
-            var identity = "new";
+            var identity = "new_full";
             var activeIdentityRadio = document.querySelector('input[name="student_identity"]:checked');
             if (activeIdentityRadio) {
                 identity = activeIdentityRadio.value;
             }
 
-            var materialsTotal = 3240; // 預設全套
-            var idText = "新生(全套教材)";
+            var materialsTotal = 3240; 
+            var idText = "New B1 學生";
 
-            if (identity === 'new') {
+            if (identity === 'new_full') {
                 materialsTotal = 3240;
-                idText = "新進 B1 學生 (全套教材 $3,240)";
-            } else if (identity === 'old_azar_workbook') {
+                idText = "New B1 學生 (Buy Azar Basic Grammar SB/WB + Oxford Discover SB/WB Book 3 + Notebooks = $3,240)";
+            } else if (identity === 'old_azar') {
                 materialsTotal = 1830;
-                idText = "A2 直升 B1 舊生 (加購 Azar語法+作業本 $1,830)";
-            } else if (identity === 'old_od_workbook') {
+                idText = "B1 學生 (Buy Azar Basic Grammar SB/WB + Notebooks = $1,830)";
+            } else if (identity === 'old_od') {
                 materialsTotal = 1910;
-                idText = "已具語法書舊生 (加購 OD3讀本+作業本 $1,910)";
-            } else if (identity === 'old_no_mat') {
-                materialsTotal = 0;
-                idText = "沿用舊教材 (免購教材 $0)";
+                idText = "B1 學生 (Buy Oxford Discover SB/WB Book 3 + Notebooks = $1,910)";
+            } else if (identity === 'old_notebook') {
+                materialsTotal = 500;
+                idText = "B1 學生 (Buy Notebooks = $500)";
             }
 
             var tuitionTotal = course.price * course.lessons; // 820 * 38 = 31,160
